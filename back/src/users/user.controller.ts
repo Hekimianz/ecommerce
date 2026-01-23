@@ -1,11 +1,13 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './User.entity';
+import { JwtAuthGuard } from 'src/auth/auth.guard';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @UseGuards(JwtAuthGuard)
   @Get()
   public async findAll(): Promise<User[]> {
     return await this.userService.findAll();
@@ -17,7 +19,9 @@ export class UserController {
   }
 
   @Get('email/:email')
-  public async findByEmail(@Param('email') email: string): Promise<User> {
+  public async findByEmail(
+    @Param('email') email: string,
+  ): Promise<User | null> {
     return await this.userService.findByEmail(email);
   }
 }
