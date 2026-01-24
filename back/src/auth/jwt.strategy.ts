@@ -9,6 +9,12 @@ export type JwtPayload = {
   role?: string;
 };
 
+export type AuthUser = {
+  userId: string;
+  email: string;
+  role?: string;
+};
+
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(config: ConfigService) {
@@ -24,7 +30,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(payload: JwtPayload) {
+  validate(payload: JwtPayload): AuthUser {
     return { userId: payload.sub, email: payload.email, role: payload.role };
   }
 }

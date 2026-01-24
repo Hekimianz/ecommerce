@@ -3,7 +3,7 @@ import {
   ConflictException,
   Injectable,
 } from '@nestjs/common';
-import { Role, User } from 'src/users/User.entity';
+import { User } from 'src/users/User.entity';
 import { UserService } from 'src/users/user.service';
 import SignInDTO from './DTOs/signin-user.dto';
 import * as bcrypt from 'bcrypt';
@@ -11,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { RegisterUserDTO } from './DTOs/register-user.dto';
 
 export type LoginReponse = {
-  user: Omit<User, 'password'>;
+  user: Omit<User, 'password' | 'role' | 'isActive'>;
   accessToken: string;
 };
 
@@ -19,7 +19,6 @@ export type RegisterResponse = {
   user: {
     id: string;
     email: string;
-    role: Role;
   };
 };
 
@@ -38,7 +37,7 @@ export class AuthService {
     if (!validPass)
       throw new BadRequestException('Email or password incorrect');
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { password, ...result } = user;
+    const { password, role, isActive, ...result } = user;
 
     const payload = {
       sub: user.id,
@@ -47,6 +46,9 @@ export class AuthService {
     };
 
     const accessToken = await this.jwtService.signAsync(payload);
+    if (!user.isActive) {
+      await this.usersService.activateUser(user.id);
+    }
 
     return { user: result, accessToken };
   }

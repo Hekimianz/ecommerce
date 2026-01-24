@@ -1,7 +1,9 @@
-import { Controller, Get, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Patch, Req, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
 import { User } from './User.entity';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
+import { Request } from 'express';
+import { AuthUser } from 'src/auth/jwt.strategy';
 
 @Controller('users')
 export class UserController {
@@ -9,12 +11,14 @@ export class UserController {
 
   @UseGuards(JwtAuthGuard)
   @Get()
-  public async findAll(): Promise<User[]> {
+  public async findAll(): Promise<Omit<User, 'password' | 'role'>[]> {
     return await this.userService.findAll();
   }
 
   @Get(':id')
-  public async findOne(@Param('id') id: string): Promise<User> {
+  public async findOne(
+    @Param('id') id: string,
+  ): Promise<Omit<User, 'password'>> {
     return await this.userService.findOne(id);
   }
 
@@ -23,5 +27,20 @@ export class UserController {
     @Param('email') email: string,
   ): Promise<User | null> {
     return await this.userService.findByEmail(email);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('admin/:id')
+  public async makeAdmin(@Param('id') id: string): Promise<string> {
+    return await this.userService.makeAdmin(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('delete/:id')
+  public async deleteUser(
+    @Param('id') id: string,
+    @Req() req: Request & { user: AuthUser },
+  ): Promise<string> {
+    return await this.userService.deleteUser(id, req.user.userId);
   }
 }
