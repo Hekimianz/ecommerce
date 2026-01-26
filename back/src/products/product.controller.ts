@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Query,
   UseGuards,
@@ -14,6 +15,7 @@ import { Roles, RolesGuard } from 'src/auth/roles.guard';
 import { Role } from 'src/users/User.entity';
 import { CreateProductDTO } from './DTOs/create-product.dto';
 import { Product } from './Product.entity';
+import { ChangeStockDTO } from './DTOs/change-stock.dto';
 
 @Controller('products')
 export class ProductController {
@@ -38,5 +40,10 @@ export class ProductController {
   @Post()
   public async createProduct(@Body() dto: CreateProductDTO): Promise<Product> {
     return await this.productService.createProduct(dto);
+  }
+
+  @Patch('/stock')
+  public async changeStock(@Body() dto: ChangeStockDTO): Promise<Product> {
+    return await this.productService.changeStock(dto);
   }
 }

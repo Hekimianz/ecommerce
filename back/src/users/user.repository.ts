@@ -26,7 +26,10 @@ export default class UsersRepository {
   }
 
   public async findByEmail(email: string): Promise<User | null> {
-    return await this.usersRepository.findOneBy({ email });
+    return await this.usersRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'password', 'role', 'isActive'],
+    });
   }
 
   public async create(dto: RegisterUserDTO): Promise<RegisterResponse> {
