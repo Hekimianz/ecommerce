@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ForbiddenException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -75,5 +76,37 @@ export class OrderService {
     }
 
     return order;
+  }
+
+  async getOrderById(id: string): Promise<Order> {
+    const order = await this.ordersRepository.getOrderById(id);
+    if (!order) throw new NotFoundException(`Order ${id} does not exist`);
+    return order;
+  }
+
+  async payOrder(id: string, userId: string): Promise<Order> {
+    const order = await this.getOrderById(id);
+    if (order.status === OrderStatus.PAID)
+      throw new BadRequestException('This order is already paid');
+    if (order.status === OrderStatus.CANCELLED)
+      throw new BadRequestException('This order has been cancelled');
+    if (order.user.id !== userId)
+      throw new ForbiddenException(
+        'This order does not belong to the user making the request',
+      );
+    return await this.ordersRepository.payOrder(order);
+  }
+
+  async cancelOrder(id: string, userId: string): Promise<Order> {
+    const order = await this.getOrderById(id);
+    if (order.status === OrderStatus.CANCELLED)
+      throw new BadRequestException('This order is already cancelled');
+    if (order.status === OrderStatus.PAID)
+      throw new BadRequestException('This order is already paid');
+    if (order.user.id !== userId)
+      throw new ForbiddenException(
+        'This order does not belong to the user making the request',
+      );
+    return await this.ordersRepository.cancelOrder(order);
   }
 }

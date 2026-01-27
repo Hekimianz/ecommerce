@@ -38,4 +38,18 @@ export class OrdersRepository {
     const order = this.ordersRepository.create({ user, items, status, total });
     return await this.ordersRepository.save(order);
   }
+
+  async getOrderById(id: string): Promise<Order | null> {
+    return await this.ordersRepository.findOneBy({ id });
+  }
+
+  async payOrder(order: Order): Promise<Order> {
+    order.status = OrderStatus.PAID;
+    return await this.ordersRepository.save(order);
+  }
+
+  async cancelOrder(order: Order): Promise<Order> {
+    order.status = OrderStatus.CANCELLED;
+    return await this.ordersRepository.save(order);
+  }
 }

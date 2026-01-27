@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Post,
   Req,
   UseGuards,
@@ -12,7 +13,7 @@ import { OrderService } from './order.service';
 import { Order } from './Order.entity';
 import { JwtAuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
-import { JwtPayload } from 'src/auth/jwt.strategy';
+import { AuthUser, JwtPayload } from 'src/auth/jwt.strategy';
 import { CreateOrderDTO } from './DTOs/create-order.dto';
 
 @Controller('orders')
@@ -33,5 +34,23 @@ export class OrderController {
     @Body() dto: CreateOrderDTO,
   ): Promise<Order> {
     return await this.orderService.createOrder(req.user.sub, dto);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('pay/:id')
+  public async payOrder(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Req() req: Request & { user: AuthUser },
+  ): Promise<Order> {
+    return await this.orderService.payOrder(id, req.user.userId);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('cancel/:id')
+  public async cancelOrder(
+    @Param('id', new ParseUUIDPipe()) id: string,
+    @Req() req: Request & { user: AuthUser },
+  ): Promise<Order> {
+    return await this.orderService.cancelOrder(id, req.user.userId);
   }
 }
