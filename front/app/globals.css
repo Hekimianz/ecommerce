@@ -1,13 +1,18 @@
-@import url('https://fonts.googleapis.com/css2?family=Sirivennela&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+
 @import 'tailwindcss';
 @import 'tw-animate-css';
 
 body {
-  font-family: var(--font-domine), system-ui, sans-serif;
+  font-family: 'Playfair Display', serif;
 }
 
-.font-siri {
-  font-family: 'Sirivennela', system-ui, sans-serif;
+.font-playfair {
+  font-family: 'Playfair Display', serif;
+}
+
+.font-dancing {
+  font-family: 'Dancing Script', cursive;
 }
 
 @theme inline {

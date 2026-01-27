@@ -10,13 +10,14 @@ export default function Register() {
   const [password, setPassword] = useState('');
   const [confPassword, setConfPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
     setLoading(true);
 
     if (password !== confPassword) {
-      alert('Passwords do not match');
+      setError('Passwords do not match');
       setLoading(false);
       return;
     }
@@ -30,9 +31,12 @@ export default function Register() {
     );
 
     if (!res.ok) {
-      const text = await res.text();
+      const text = await res.json();
+      setError(text.message);
+      setLoading(false);
       throw new Error(text || 'Register failed');
     }
+    setError(null);
     setLoading(false);
     router.push('/login');
   }
@@ -43,10 +47,11 @@ export default function Register() {
         onSubmit={handleSubmit}
       >
         <h1 className="text-2xl font-serif-var border-b pb-4">Register</h1>
+        {error && <span className="text-red-300">{error}</span>}
         <input
           type="email"
           placeholder="Email"
-          className="w-full rounded border border-white/30 px-3 py-2"
+          className="w-full rounded border border-white/30 px-3 py-2 mt-4"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}

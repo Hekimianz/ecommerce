@@ -3,12 +3,15 @@ import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { LoaderCircle } from 'lucide-react';
+import { useAuth } from '../context/auth-context';
 
 export default function Login() {
+  const { setToken } = useAuth();
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   async function handleSubmit(e: React.SubmitEvent) {
     e.preventDefault();
@@ -21,12 +24,16 @@ export default function Login() {
     });
 
     if (!res.ok) {
-      const text = await res.text();
+      const text = await res.json();
+      setError(text.message);
+      setLoading(false);
       throw new Error(text || 'Login failed');
     }
     setLoading(false);
+    setError(null);
     const data = await res.json();
-    localStorage.setItem('accessToken', data.accessToken);
+
+    setToken(data.accessToken);
     router.push('/');
   }
   return (
@@ -36,10 +43,11 @@ export default function Login() {
         onSubmit={handleSubmit}
       >
         <h1 className="text-2xl font-serif-var border-b pb-4">Login</h1>
+        {error && <span className="text-red-300">{error}</span>}
         <input
           type="email"
           placeholder="Email"
-          className="w-full rounded border border-white/30 px-3 py-2"
+          className="w-full rounded border border-white/30 px-3 py-2 mt-4"
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}

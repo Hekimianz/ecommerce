@@ -44,14 +44,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setReady(true);
   }, []);
 
-  const user = useMemo(() => (token ? decodeToken(token) : null), [token]);
-
   const setToken = (newToken: string | null) => {
     if (newToken) localStorage.setItem(STORAGE_KEY, newToken);
     else localStorage.removeItem(STORAGE_KEY);
     setTokenState(newToken);
   };
 
+  const user = useMemo(() => (token ? decodeToken(token) : null), [token]);
   const logout = () => setToken(null);
 
   return (

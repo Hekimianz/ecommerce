@@ -9,19 +9,23 @@ export default function Navbar() {
   if (!ready) return null;
 
   return (
-    <div className="flex items-center justify-between px-10 py-5">
-      <Link href="/">Commonplace</Link>
+    <div className="flex items-center justify-between px-5 py-5 shadow-lg border-b border-white/20 mb-10 text-xl">
+      <Link href="/" className="font-dancing text-3xl font-bold select-none">
+        Commonplace
+      </Link>
 
       {isAuthenticated ? (
-        <div className="flex items-center gap-3">
-          <span className="text-sm opacity-80">{user?.email}</span>
-          <button onClick={logout}>Logout</button>
-        </div>
+        <nav className="flex items-center gap-3">
+          <Link href="profile">{user?.email}</Link>
+          <button onClick={logout} className="cursor-pointer">
+            Logout
+          </button>
+        </nav>
       ) : (
-        <div className="flex items-center gap-3">
+        <nav className="flex items-center gap-3">
           <Link href="/login">Login</Link>
           <Link href="/register">Register</Link>
-        </div>
+        </nav>
       )}
     </div>
   );
