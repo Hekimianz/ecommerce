@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Zain:ital,wght@0,200;0,300;0,400;0,700;0,800;0,900;1,300;1,400&display=swap');
 
 @import 'tailwindcss';
 @import 'tw-animate-css';
@@ -13,6 +13,10 @@ body {
 
 .font-dancing {
   font-family: 'Dancing Script', cursive;
+}
+
+.font-zain {
+  font-family: 'Zain', sans-serif;
 }
 
 @theme inline {
@@ -30,6 +34,7 @@ body {
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-book: var(--book);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
@@ -60,6 +65,7 @@ body {
   --radius: 0.625rem;
   --background: #101d23;
   --foreground: #f1f5f9;
+  --book: #57cc99;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
