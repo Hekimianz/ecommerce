@@ -28,6 +28,11 @@ export class ProductController {
     return await this.productService.getAllProducts(name);
   }
 
+  @Get('featured')
+  public async getFeatured(): Promise<Product[]> {
+    return await this.productService.getFeatured();
+  }
+
   @Get(':id')
   public async getById(
     @Param('id', new ParseUUIDPipe()) id: string,

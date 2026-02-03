@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEnum,
   IsInt,
   IsNotEmpty,
@@ -54,4 +55,12 @@ export class CreateProductDTO {
   @IsNotEmpty()
   @IsUrl()
   coverUrl: string;
+
+  @IsNotEmpty()
+  @IsString()
+  author: string;
+
+  @IsNotEmpty()
+  @IsBoolean()
+  isFeatured: boolean;
 }

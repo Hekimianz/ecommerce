@@ -26,6 +26,10 @@ export class ProductsRepository {
     return await this.productsRepository.findOneBy({ id });
   }
 
+  async getFeatured(): Promise<Product[]> {
+    return await this.productsRepository.find({ where: { isFeatured: true } });
+  }
+
   async createProduct(dto: CreateProductDTO): Promise<Product> {
     const newProduct = this.productsRepository.create(dto);
     return await this.productsRepository.save(newProduct);

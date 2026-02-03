@@ -47,4 +47,10 @@ export class Product {
 
   @Column()
   coverUrl: string;
+
+  @Column()
+  author: string;
+
+  @Column()
+  isFeatured: boolean;
 }

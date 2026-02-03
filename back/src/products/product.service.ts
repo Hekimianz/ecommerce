@@ -21,6 +21,10 @@ export class ProductService {
     return product;
   }
 
+  async getFeatured(): Promise<Product[]> {
+    return await this.productsRepository.getFeatured();
+  }
+
   async createProduct(dto: CreateProductDTO): Promise<Product> {
     return await this.productsRepository.createProduct(dto);
   }
